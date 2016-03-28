@@ -1,0 +1,9 @@
+CAPI=1
+[main]
+name = wallento/wb2nasti/wb2nasti
+
+[fileset verilog]
+files =
+ rtl/verilog/wb2nasti.sv
+file_type = verilogSource
+usage = sim synth
