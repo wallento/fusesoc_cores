@@ -1,6 +1,6 @@
 CAPI=1
 [main]
-name = wallento/svchannels/nasti
+name = wallento:svchannels:nasti
 
 [fileset verilog]
 files =

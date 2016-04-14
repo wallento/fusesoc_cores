@@ -1,6 +1,6 @@
 CAPI=1
 [main]
-name = wallento/svchannels/wishbone
+name = wallento:svchannels:wishbone
 
 [fileset verilog]
 files =

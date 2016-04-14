@@ -1,6 +1,6 @@
 CAPI=1
 [main]
-name = wallento/wb2nasti/wb2nasti
+name = wallento:wb2nasti:wb2nasti
 
 [fileset verilog]
 files =
