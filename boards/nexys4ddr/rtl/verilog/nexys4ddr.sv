@@ -6,8 +6,8 @@ module nexys4ddr
    input                 cpu_reset_n,
 
    output                uart_rxd_out,
-   input                 uart_txd_in,   
-   
+   input                 uart_txd_in,
+
    output [12:0]         ddr2_addr,
    output [2:0]          ddr2_ba,
    output                ddr2_cas_n,
@@ -22,7 +22,7 @@ module nexys4ddr
    output                ddr2_odt,
    output                ddr2_ras_n,
    output                ddr2_we_n,
-   
+
    // System Interface
    output                sys_clk,
    output                sys_rst,
@@ -82,7 +82,7 @@ module nexys4ddr
 
    logic         rst;
    assign rst = !cpu_reset_n;
-   
+
    logic        clk_ddr_ref; // 200 MHz clock
    logic        clk_ddr_sys; // 166.667 MHz clock
    logic        clk_ddr_locked;
@@ -107,11 +107,11 @@ module nexys4ddr
         .reset   (!ddr_mmcm_locked | rst),
         .locked  (clk_sys_locked));*/
    assign sys_clk = mig_ui_clk;
-   assign sys_rst = mig_ui_rst;   
+   assign sys_rst = mig_ui_rst;
 
-   assign uart_rx[0] = UART_TXD_IN;
-   assign UART_RXD_PUT = uart_tx[0];
-   
+   assign uart_rx[0] = uart_txd_in;
+   assign uart_rxd_out = uart_tx[0];
+
    BSCANE2
      #(.JTAG_CHAIN(2)) // Use ID 2 as 1 is used by chipscope
    xilinx_jtag_tap0
@@ -190,7 +190,7 @@ module nexys4ddr
         .s_axi_rlast                    (ddr_rlast),
         .s_axi_rvalid                   (ddr_rvalid),
         .s_axi_rready                   (ddr_rready)
-        );   
+        );
 
 endmodule // nexys4ddr
 
