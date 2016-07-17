@@ -23,18 +23,18 @@ public:
 
 }
 
-#define VERILATED_TOPLEVEL(topname) \
-  class topname : public simutilVerilator::VerilatedToplevel,	\
-    public V##topname {						\
-  public:							\
-  topname(const char* name) : V##topname(name) {		\
-      sig_clk.signal = &clk;					\
-      sig_rst.signal = &rst;					\
-    }								\
-    void wrapEval() { eval(); }					\
+#define VERILATED_TOPLEVEL(topname, clk, rst)                   \
+  class topname : public simutilVerilator::VerilatedToplevel,   \
+    public V##topname {                                         \
+  public:                                                       \
+  topname(const char* name) : V##topname(name) {                \
+      sig_clk.signal = &clk;                                    \
+      sig_rst.signal = &rst;                                    \
+    }                                                           \
+    void wrapEval() { eval(); }                                 \
     void wrapTrace(VerilatedVcdC* tfp, int levels, int options=0) { \
-      trace(tfp, levels, options);				    \
-    }								    \
+      trace(tfp, levels, options);                                  \
+    }                                                               \
     };
 
 #endif
