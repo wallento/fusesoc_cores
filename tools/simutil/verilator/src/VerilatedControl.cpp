@@ -75,7 +75,7 @@ void VerilatedControl::run() {
             _VL_STRING_TO_VINT(16*sizeof(unsigned int)*8, filename_vl, strlen(filename), filename);
             m_readmemh_file(filename_vl);
         } else {
-            m_readmemh();
+          //            m_readmemh();
         }
     }
 
