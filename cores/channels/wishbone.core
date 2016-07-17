@@ -5,5 +5,5 @@ name = wallento:svchannels:wishbone
 [fileset verilog]
 files =
  rtl/verilog/wb_channel.sv
-file_type = verilogSource
+file_type = systemVerilogSource
 usage = sim synth

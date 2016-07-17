@@ -20,11 +20,11 @@ interface wb_channel
     DATA_WIDTH = 32
     );
 
-   logic cyc_o;
-   logic stb_o;
-   logic we_o;
-   logic [ADDR_WIDTH-1:0] adr_o;
-   logic [DATA_WIDTH-1:0] dat_o;
+   logic                    cyc_o;
+   logic                    stb_o;
+   logic                    we_o;
+   logic [ADDR_WIDTH-1:0]   adr_o;
+   logic [DATA_WIDTH-1:0]   dat_o;
    logic [DATA_WIDTH/8-1:0] sel_o;
    logic [2:0]              cti_o;
    logic [1:0]              bte_o;
