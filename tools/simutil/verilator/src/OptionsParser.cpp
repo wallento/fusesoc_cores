@@ -59,7 +59,7 @@ void OptionsParser::parse(int argc, char **argv) {
         static struct option long_options[] = {
                 {"standalone", no_argument,       0, 'a'},
                 {"meminit",    required_argument, 0, 'b'},
-                {"vcd", no_argument, 0, 'c' },
+                {"vcd", optional_argument, 0, 'c' },
                 {"vcd-from",   required_argument, 0, 'd'},
                 {"vcd-to",     required_argument, 0, 'e'},
                 {"limit", required_argument, 0, 'f'},
