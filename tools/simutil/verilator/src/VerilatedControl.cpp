@@ -46,6 +46,11 @@ void VerilatedControl::init(VerilatedToplevel &top, int argc,
 VerilatedControl::~VerilatedControl() {
 }
 
+/**
+ * Add a memory block to be initialized in the simulation
+ *
+ * @param scopename the name of the memory element in the HDL hierarchy
+ */
 void VerilatedControl::addMemory(const char* scopename) {
     m_Memories.push_back(strdup(scopename));
 }
@@ -60,13 +65,19 @@ uint64_t VerilatedControl::getTime() {
     return m_time;
 }
 
+/**
+ * Run the verilated simulation and return its result
+ */
 void VerilatedControl::run() {
     svScope scope;
 
     for (std::vector<const char*>::iterator it = m_Memories.begin();
             it != m_Memories.end(); ++it) {
         scope = svGetScopeFromName (*it);
-        assert(scope);
+        if (!scope) {
+            std::cerr << "ERROR: No memory found at " << *it << std::endl;
+            exit(1);
+        }
         svSetScope (scope);
 
         if (m_opt->hasMemInit()) {
