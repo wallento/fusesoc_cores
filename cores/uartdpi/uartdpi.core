@@ -8,10 +8,9 @@ files =
 file_type = systemVerilogSource
 usage = sim synth
 
-[fileset dpi]
-usage = sim
-file_type = C
-files =
+[dpi]
+libs = util
+src_files =
  src/uartdpi.c
 
 [provider]
