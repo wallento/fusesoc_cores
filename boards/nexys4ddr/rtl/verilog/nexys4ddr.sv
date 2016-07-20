@@ -63,21 +63,21 @@ module nexys4ddr
    output                ddr_rvalid,
    input                 ddr_rready,
 
-   output                jtag_capture_dr,
+/*   output                jtag_capture_dr,
    output                jtag_select,
    output                jtag_shift_dr,
    output                jtag_update_dr,
    output                jtag_tck,
    output                jtag_tms,
    output                jtag_tdi,
-   input                 jtag_tdo,
+   input                 jtag_tdo,*/
 
    output [NUM_UART-1:0] uart_rx,
-   input [NUM_UART-1:0]  uart_tx,
+   input [NUM_UART-1:0]  uart_tx
 
-   output [23*8-1:0]     gpio_in,
+/*   output [23*8-1:0]     gpio_in,
    input [23*8-1:0]      gpio_out,
-   input [23*8-1:0]      gpio_oe
+   input [23*8-1:0]      gpio_oe*/
    );
 
    logic         rst;
@@ -107,12 +107,12 @@ module nexys4ddr
         .reset   (!ddr_mmcm_locked | rst),
         .locked  (clk_sys_locked));*/
    assign sys_clk = mig_ui_clk;
-   assign sys_rst = mig_ui_rst;
+   assign sys_rst = !(ddr_mmcm_locked & ddr_calib_done);
 
    assign uart_rx[0] = uart_txd_in;
    assign uart_rxd_out = uart_tx[0];
 
-   BSCANE2
+/*   BSCANE2
      #(.JTAG_CHAIN(2)) // Use ID 2 as 1 is used by chipscope
    xilinx_jtag_tap0
      (
@@ -127,27 +127,36 @@ module nexys4ddr
       .TMS       (jtag_tms),
       .UPDATE    (jtag_update_dr),
       .TDO       (jtag_tdi)
-      );
-   
+      );*/
+
    mig_7series
      u_mig_7series
        (.*,
         .init_calib_complete            (ddr_calib_done),
         .sys_clk_i                      (clk_ddr_sys),
-        .clk_ref_i                      (clk_ddr_ref),
+//        .clk_ref_i                      (clk_ddr_ref),
         .sys_rst                        (clk_ddr_locked | rst),
-         
+
         // Application interface ports
         .ui_clk                         (mig_ui_clk),
         .ui_clk_sync_rst                (mig_ui_rst),
         .mmcm_locked                    (ddr_mmcm_locked),
-        .aresetn                        (0),
+        .aresetn                        (!sys_rst),
         .app_sr_req                     (0),
         .app_ref_req                    (0),
         .app_zq_req                     (0),
         .app_sr_active                  (),
         .app_ref_ack                    (),
         .app_zq_ack                     (),
+
+        .ui_addn_clk_0                  (),
+        .ui_addn_clk_1                  (),
+        .ui_addn_clk_2                  (),
+        .ui_addn_clk_3                  (),
+        .ui_addn_clk_4                  (),
+
+        .device_temp_i                  (0),
+
         // Slave Interface Write Address Ports
         .s_axi_awid                     (ddr_awid),
         .s_axi_awaddr                   (ddr_awaddr),
@@ -193,4 +202,3 @@ module nexys4ddr
         );
 
 endmodule // nexys4ddr
-
