@@ -10,6 +10,9 @@ usage = sim synth
 
 [fileset dpi]
 usage = sim
+file_type = C
+files =
+ src/uartdpi.c
 
 [provider]
 name = github
