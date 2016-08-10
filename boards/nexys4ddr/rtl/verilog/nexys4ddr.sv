@@ -123,11 +123,11 @@ module nexys4ddr
    assign rst = !cpu_resetn;
 
    logic        clk_ddr_ref; // 200 MHz clock
-   logic        clk_ddr_sys; // 166.667 MHz clock
+   logic        clk_ddr_sys; // 200 MHz clock
    logic        clk_ddr_locked;
    logic        ddr_calib_done;
    logic        ddr_mmcm_locked;
-   logic        mig_ui_clk; // clock from MIG UI (83.333 MHz)
+   logic        mig_ui_clk; // clock from MIG UI (1/4 of clk_ddr_ref = 50 MHz)
    logic        mig_ui_rst; // Synchronized reset
 
    clk_gen_ddr
