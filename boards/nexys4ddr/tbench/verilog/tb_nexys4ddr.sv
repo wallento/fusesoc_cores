@@ -3,8 +3,11 @@
 module tb_nexys4ddr
   (
    output reg   clk,
-   output reg   cpu_reset_n,
 
+   // push button "CPU RESET" (C12)
+   output reg   cpu_resetn,
+
+   // UART (signals names from a DTE/PC point of view)
    output       uart_txd_in,
    input        uart_rxd_out,
 
@@ -31,10 +34,12 @@ module tb_nexys4ddr
    initial begin
       u_ddr2.reset_task;
       clk = 0;
-      cpu_reset_n = 0;
+
+      // XXX: is this how it works on the board? Isn't cpu_resetn just a button?
+      cpu_resetn = 0;
       @(negedge glbl.GSR);
       #100000
-      cpu_reset_n = 1;
+      cpu_resetn = 1;
    end
 
    ddr2

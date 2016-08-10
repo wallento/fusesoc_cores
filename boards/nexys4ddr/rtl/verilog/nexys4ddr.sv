@@ -3,7 +3,7 @@ module nexys4ddr
   (
    // FPGA IO
    input                 clk,
-   input                 cpu_reset_n,
+   input                 cpu_resetn,
 
    output                uart_rxd_out,
    input                 uart_txd_in,
@@ -81,7 +81,7 @@ module nexys4ddr
    );
 
    logic         rst;
-   assign rst = !cpu_reset_n;
+   assign rst = !cpu_resetn;
 
    logic        clk_ddr_ref; // 200 MHz clock
    logic        clk_ddr_sys; // 166.667 MHz clock
