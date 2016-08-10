@@ -1,3 +1,35 @@
+/* Copyright (c) 2016 by the author(s)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * =============================================================================
+ *
+ * Nexys 4 DDR board abstraction
+ *
+ * Parameters:
+ * - NUM_UART: Number of UART devices supported.
+ *     Currently 1 is the only valid choice.
+ *
+ * Author(s):
+ *   Stefan Wallentowitz <stefan@wallentowitz.de>
+ *   Philipp Wagner <philipp.wagner@tum.de>
+ */
 module nexys4ddr
   #(parameter NUM_UART = 1)
   (
@@ -5,8 +37,11 @@ module nexys4ddr
    input                 clk,
    input                 cpu_resetn,
 
+   // all following UART signals are from a DTE (the PC) point-of-view
    output                uart_rxd_out,
    input                 uart_txd_in,
+   output                uart_cts, // active low (despite the name)
+   input                 uart_rts, // active low (despite the name)
 
    output [12:0]         ddr2_addr,
    output [2:0]          ddr2_ba,
@@ -72,8 +107,12 @@ module nexys4ddr
    output                jtag_tdi,
    input                 jtag_tdo,*/
 
+   // all following UART signals are from a DCE (FPGA) point of view!
+   // i.e. "crossed" from the input signals
    output [NUM_UART-1:0] uart_rx,
-   input [NUM_UART-1:0]  uart_tx
+   input [NUM_UART-1:0]  uart_tx,
+   output [NUM_UART-1:0] uart_cts_n,
+   input [NUM_UART-1:0]  uart_rts_n
 
 /*   output [23*8-1:0]     gpio_in,
    input [23*8-1:0]      gpio_out,
@@ -109,8 +148,23 @@ module nexys4ddr
    assign sys_clk = mig_ui_clk;
    assign sys_rst = !(ddr_mmcm_locked & ddr_calib_done);
 
+
+
+   // UART
+   initial begin
+      if (NUM_UART != 1) begin
+         $display("%m: NUM_UART must be 1");
+         $stop;
+      end
+   end
+   // Important note: We change to a different view of naming here.
+   // The signals from/to the board are seen from a DTE (host PC) point of view,
+   // all internally used signals are seen from a DCE (FPGA) point of view
+   // (i.e. from our view).
    assign uart_rx[0] = uart_txd_in;
    assign uart_rxd_out = uart_tx[0];
+   assign uart_cts = uart_rts_n[0];
+   assign uart_cts_n[0] = uart_rts;
 
 /*   BSCANE2
      #(.JTAG_CHAIN(2)) // Use ID 2 as 1 is used by chipscope
