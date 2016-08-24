@@ -114,6 +114,6 @@ module tb_nexys4ddr (
          .rx  (uart_rxd_out),
          .rst (glbl.GSR));
 
-   assign uart_rtsn = 1'b0;
+   assign uart_rts = 1'b0;
 
 endmodule // tb_nexys4
