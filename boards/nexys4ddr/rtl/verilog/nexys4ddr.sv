@@ -185,8 +185,7 @@ module nexys4ddr
 
    mig_7series
      u_mig_7series
-       (.*,
-        .init_calib_complete            (ddr_calib_done),
+       (.init_calib_complete            (ddr_calib_done),
         .sys_clk_i                      (clk_ddr_sys),
 //        .clk_ref_i                      (clk_ddr_ref),
         .sys_rst                        (clk_ddr_locked | rst),
